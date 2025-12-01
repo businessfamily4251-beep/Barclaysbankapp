@@ -124,7 +124,7 @@
                 loginId: "7897620168",
                 password: "548521"
             },
-            // MODIFICATION DEMANDÉE: Remplacer le solde de base par 251000
+            // Solde mis à jour à 251000
             initialBalance: 251000, 
             initialTransactions: [
                 // NOUVELLE TRANSACTION DEMANDÉE (Date mise à jour à 28/11/2025)
@@ -170,14 +170,14 @@
             return hidden + visible;
         };
         
-        // Fonction utilitaire pour simuler le téléchargement de PDF
+        // Fonction utilitaire pour simuler le téléchargement de REÇU TEXTE
         const downloadReceipt = (transaction, bankName, userName) => {
             const isCredit = transaction.amount >= 0 && transaction.type === 'credit';
             const sign = isCredit ? 'Crédit' : 'Débit';
             const amount = formatCurrency(transaction.amount);
             const type = isCredit ? 'Entrant' : 'Sortant';
             
-            // Contenu de base du reçu (utilisant une structure simple pour le téléchargement)
+            // Contenu de base du reçu
             const receiptContent = `
 ========================================
 REÇU DE TRANSACTION
@@ -196,12 +196,12 @@ Réf. Transaction : ${transaction.id}
 Ceci est un reçu généré électroniquement.
 `;
 
-            // Création d'un Blob (objet de données) de type PDF (texte pour la démo)
-            // Dans une implémentation réelle, ceci serait un appel à jsPDF ou un service
-            const blob = new Blob([receiptContent], { type: 'application/pdf' });
+            // Création d'un Blob (objet de données) de type texte
+            const blob = new Blob([receiptContent], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             
-            const fileName = `Reçu_${sign}_${transaction.date.replace(/\//g, '-')}_${transaction.id}.pdf`;
+            // Modification: Changer l'extension du fichier à .txt
+            const fileName = `Reçu_${sign}_${transaction.date.replace(/\//g, '-')}_${transaction.id}.txt`;
 
             // Création d'un lien invisible pour déclencher le téléchargement
             const a = document.createElement('a');
@@ -344,10 +344,11 @@ Ceci est un reçu généré électroniquement.
 
                             <button
                                 onClick={handleDownload}
+                                // Modification du texte du bouton pour refléter le format TXT
                                 className="mt-6 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-green-500/30 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
                             >
                                 <Download className="w-5 h-5" />
-                                Télécharger le reçu PDF
+                                Télécharger le reçu (TXT)
                             </button>
                             {/* SUPPRESSION DE L'INSCRIPTION DEMANDÉE : (Le PDF est un document texte simulé pour cette démonstration) */}
                         </div>
@@ -474,11 +475,9 @@ Ceci est un reçu généré électroniquement.
             return (
                 <div className="absolute top-16 right-4 md:right-6 z-30 w-full max-w-sm animate-in fade-in slide-in-from-top-4 duration-300">
                     <div className="bg-white rounded-xl shadow-xl border border-sky-100 overflow-hidden">
-                        <div className="bg-sky-500 px-4 py-3 flex justify-between items-center">
-                            <h3 className="text-white font-medium text-sm flex items-center gap-2">
-                                <Bell className="w-4 h-4" /> Information Importante
-                            </h3>
-                            <button onClick={onClose} className="text-white/80 hover:text-white">
+                        <div className="bg-sky-500 text-white p-4 rounded-t-xl flex justify-between items-center">
+                            <h3 className="font-bold text-lg">Information Importante</h3>
+                            <button onClick={onClose} className="p-1 rounded-full hover:bg-white/20">
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
@@ -663,8 +662,8 @@ Ceci est un reçu généré électroniquement.
                 setIsLoading(true);
                 // Pas de message d'information visible, juste le spinner sur le bouton
 
-                // Simuler le délai de 3 secondes
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                // MODIFICATION: Simuler le délai de 7 secondes (était 3s)
+                await new Promise(resolve => setTimeout(resolve, 7000));
 
                 // Appel de la fonction de virement
                 const result = onTransfer({ ...formData, amount: amountNum }); 
